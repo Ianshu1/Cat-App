@@ -1,14 +1,22 @@
 type FetchButtonProps = {
     onClick: () => void;
+    disabled?: boolean;
 }
 
-export const FetchButton = ({ onClick }: FetchButtonProps) => {
+export const FetchButton = ({ onClick, disabled }: FetchButtonProps) => {
     return (
         <button
             onClick={onClick}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            disabled={disabled}
+            className={`
+                font-medium py-2 px-4 rounded-lg transition-colors
+                ${disabled
+                    ? 'bg-blue-300 cursor-not-allowed'
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+                }
+            `}
         >
-            Show Cats 🐾
+            {disabled ? 'Loading...' : 'Show Cats 🐾'}
         </button>
     );
 };

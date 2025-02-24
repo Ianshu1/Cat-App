@@ -6,7 +6,7 @@ import { useViewMode } from './hooks/useViewMode';
 import { FetchButton } from './components/atoms/ShowMoreCatsButton';
 
 function App() {
-  const { cats, getCats } = useCats();
+  const { cats, isLoading, error, getCats } = useCats();
   const { viewMode, setViewMode } = useViewMode();
 
   return (
@@ -21,10 +21,20 @@ function App() {
         )}
       </div>
 
-      {viewMode === 'card' ? (
-        <CardList cats={cats} />
+      {error && (
+        <div className="text-red-500 mb-4">
+          Error: {error}
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="text-center">Loading cats...</div>
       ) : (
-        <Table cats={cats} />
+        viewMode === 'card' ? (
+          <CardList cats={cats} />
+        ) : (
+          <Table cats={cats} />
+        )
       )}
     </div>
   );
