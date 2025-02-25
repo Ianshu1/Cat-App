@@ -3,7 +3,7 @@ type FetchButtonProps = {
     disabled?: boolean;
 }
 
-export const FetchButton = ({ onClick, disabled }: FetchButtonProps) => {
+const FetchButton = ({ onClick, disabled }: FetchButtonProps) => {
     return (
         <button
             onClick={onClick}
@@ -20,3 +20,5 @@ export const FetchButton = ({ onClick, disabled }: FetchButtonProps) => {
         </button>
     );
 };
+
+export default FetchButton
