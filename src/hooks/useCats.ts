@@ -3,6 +3,7 @@ import axios from "axios";
 import { CatImage } from "../types";
 
 const API_KEY = import.meta.env.VITE_CAT_API_KEY;
+console.log("API_KEY:", API_KEY);
 const API_URL = "https://api.thecatapi.com/v1/images/search";
 
 const useCats = () => {

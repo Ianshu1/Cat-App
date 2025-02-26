@@ -6,7 +6,9 @@ import useViewMode from './hooks/useViewMode';
 import FetchButton from './components/atoms/ShowMoreCatsButton';
 import ViewToggleButtons from './components/atoms/ViewToggleButtons';
 import Search from './components/molecules/Search';
+import Pagination from './components/molecules/Pagination';
 import useDebounce from './hooks/useDebounce';
+import usePagination from './hooks/usePagination';
 
 function App() {
   const { cats, isLoading, error, getCats } = useCats();
@@ -25,23 +27,37 @@ function App() {
     );
   });
 
+  const {
+    currentPage,
+    totalPages,
+    getItemsForPage,
+    handlePageChange
+  } = usePagination({
+    totalItems: filteredCats.length,
+    itemsPerPage: 20
+  });
+
+  const paginatedCats = getItemsForPage(filteredCats);
+
   return (
     <div className="p-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-        <div>
+      <div className="flex justify-between items-center mb-8">
+        <div className="flex gap-4">
           <FetchButton onClick={getCats} disabled={isLoading} />
+          {cats.length > 0 && (
+            <ViewToggleButtons
+              viewMode={viewMode}
+              onViewChange={setViewMode}
+            />
+          )}
         </div>
 
         {cats.length > 0 && (
-          <div className="flex items-center gap-4">
+          <div className="ml-auto">
             <Search
               value={searchQuery}
               onChange={setSearchQuery}
               placeholder="Search by breed, temperament or origin..."
-            />
-            <ViewToggleButtons
-              viewMode={viewMode}
-              onViewChange={setViewMode}
             />
           </div>
         )}
@@ -64,9 +80,17 @@ function App() {
           )}
 
           {viewMode === 'card' ? (
-            <CardList cats={filteredCats} />
+            <CardList cats={paginatedCats} />
           ) : (
-            <Table cats={filteredCats} />
+            <Table cats={paginatedCats} />
+          )}
+
+          {filteredCats.length > 20 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           )}
         </>
       )}
