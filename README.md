@@ -5,9 +5,12 @@ A React application that displays cat images and information using The Cat API.
 ## Features
 
 - Fetch and display cat images with breed information
-- Toggle between card and table views
-- Responsive design
-- Loading states and error handling
+- Toggle between card and table views:
+
+<div align="center">
+  <img src="./screenshots/card.png" alt="Card View" width="400"/>
+  <img src="./screenshots/table.png" alt="Table View" width="400"/>
+</div>
 
 ## Technologies Used
 
