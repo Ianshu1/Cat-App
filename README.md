@@ -35,17 +35,9 @@ Main dependencies used in this project:
 ## Installation and Setup
 
 1. Clone the repository
-2. Install dependencies: `npm install`
+2. Install dependencies: `npm install`then `npm run build`
 3. Copy `.env.example` to `.env`
 4. Get your API key from [The Cat API](https://thecatapi.com/) OR from developer
 5. Insert your API key into the `.env` file
 6. Start the development server (`npm run dev`)
 7. Enjoy!
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
