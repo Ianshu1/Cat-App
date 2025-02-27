@@ -8,8 +8,8 @@ A React application that displays cat images and information using The Cat API.
 - Toggle between card and table views:
 
 <div align="center">
-  <img src="./screenshots/card.png" alt="Card View" width="400"/>
-  <img src="./screenshots/table.png" alt="Table View" width="400"/>
+  <img src="./src/assets/card.png" alt="Card View" width="400"/>
+  <img src="./src/assets/table.png" alt="Table View" width="400"/>
 </div>
 
 ## Technologies Used
