@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# Cat Browser App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application that displays cat images and information using The Cat API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Fetch and display cat images with breed information
+- Toggle between card and table views
+- Responsive design
+- Loading states and error handling
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
+- The Cat API
 
-- Configure the top-level `parserOptions` property like this:
+## Dependencies
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Main dependencies used in this project:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- `axios`: ^1.x.x - Promise based HTTP client for making API requests
+- `react`: ^18.x.x
+- `typescript`: ^5.x.x
+- `tailwindcss`: ^3.x.x
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Available Scripts
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+
+## Installation and Setup
+
+1. Clone the repository
+2. Install dependencies: `npm install`then `npm run build`
+3. Copy `.env.example` to `.env`
+4. Get your API key from [The Cat API](https://thecatapi.com/) OR from developer
+5. Insert your API key into the `.env` file
+6. Start the development server (`npm run dev`)
+7. Enjoy!

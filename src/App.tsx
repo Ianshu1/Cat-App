@@ -1,59 +1,101 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import CardList from './components/molecules/CardList';
 import Table from './components/molecules/Table';
-import axios from 'axios';
-import { CatImage } from './types';
+import useCats from './hooks/useCats';
+import useViewMode from './hooks/useViewMode';
+import FetchButton from './components/atoms/ShowMoreCatsButton';
+import ViewToggleButtons from './components/atoms/ViewToggleButtons';
+import Search from './components/molecules/Search';
+import Pagination from './components/molecules/Pagination';
+import useDebounce from './hooks/useDebounce';
+import usePagination from './hooks/usePagination';
 
 function App() {
-  const [cats, setCats] = useState<CatImage[]>([]);
-  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const { cats, isLoading, error, getCats } = useCats();
+  const { viewMode, setViewMode } = useViewMode();
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  const getCats = async () => {
-    const response = await axios.get<CatImage[]>("https://api.thecatapi.com/v1/images/search?limit=10&has_breeds=1");
-    setCats(response.data);
-  };
+  const filteredCats = cats.filter(cat => {
+    const breed = cat.breeds?.[0];
+    const query = debouncedSearchQuery.toLowerCase();
+
+    return (
+      breed?.name?.toLowerCase().includes(query) ||
+      breed?.temperament?.toLowerCase().includes(query) ||
+      breed?.origin?.toLowerCase().includes(query)
+    );
+  });
+
+  const {
+    currentPage,
+    totalPages,
+    getItemsForPage,
+    handlePageChange
+  } = usePagination({
+    totalItems: filteredCats.length,
+    itemsPerPage: 20
+  });
+
+  const paginatedCats = getItemsForPage(filteredCats);
 
   return (
     <div className="p-8">
-      <div className="flex gap-4 mb-8">
-        <button
-          onClick={getCats}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-        >
-          Show Cats 🐾
-        </button>
+      <div className="flex justify-between items-center mb-8">
+        <div className="flex gap-4">
+          <FetchButton onClick={getCats} disabled={isLoading} />
+          {cats.length > 0 && (
+            <ViewToggleButtons
+              viewMode={viewMode}
+              onViewChange={setViewMode}
+            />
+          )}
+        </div>
 
         {cats.length > 0 && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode('card')}
-              className={`py-2 px-4 rounded-lg transition-colors ${viewMode === 'card'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-            >
-              Card View
-            </button>
-            <button
-              onClick={() => setViewMode('table')}
-              className={`py-2 px-4 rounded-lg transition-colors ${viewMode === 'table'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-            >
-              Table View
-            </button>
+          <div className="ml-auto">
+            <Search
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search by breed, temperament or origin..."
+            />
           </div>
         )}
       </div>
 
-      {viewMode === 'card' ? (
-        <CardList cats={cats} />
+      {error && (
+        <div className="text-red-500 mb-4">
+          Error: {error}
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="text-center">Loading cats...</div>
       ) : (
-        <Table cats={cats} />
+        <>
+          {filteredCats.length === 0 && searchQuery && (
+            <div className="text-center text-gray-500 mb-4">
+              No cats found matching "{searchQuery}"
+            </div>
+          )}
+
+          {viewMode === 'card' ? (
+            <CardList cats={paginatedCats} />
+          ) : (
+            <Table cats={paginatedCats} />
+          )}
+
+          {filteredCats.length > 20 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </>
       )}
     </div>
   );
 }
 
-export default App
+export default App;
